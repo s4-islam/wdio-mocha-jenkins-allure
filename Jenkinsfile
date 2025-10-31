@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs NodeJS
+        nodejs 'NodeJS'
     }
 
     environment {
@@ -42,13 +42,13 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            echo 'Publishing allure report and archiving artifacts...'
             allure([
                 reportBuildPolicy: 'ALWAYS',
-                results: [[path: 'allure-report']]
+                results: [[path: env.ALLURE_RESULTS_DIR]]
             ])
-            echo 'Cleaning workspace and publishing allure report...'
             archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
+            cleanWs()
         }
 
         success {
