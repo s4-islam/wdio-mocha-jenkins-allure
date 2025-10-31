@@ -6,7 +6,6 @@ pipeline {
     }
 
     environment {
-        PROJECT_NAME = "WDIO-Mocha-Jenkins-Allure"
         ALLURE_RESULTS_DIR = "allure-results"
         ALLURE_REPORT_DIR = "allure-report"
     }
@@ -48,16 +47,16 @@ pipeline {
             archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
             allure([
                 reportBuildPolicy: 'ALWAYS',
-                results: [[path: "${ALLURE_RESULTS_DIR}"]]
+                results: [[path: 'allure-report']]
             ])
         }
 
         success {
-            echo "Pipeline for ${PROJECT_NAME} completed successfully!"
+            echo "Pipeline for WDIO-Mocha-Jenkins-Allure completed successfully!"
         }
 
         failure {
-            echo "Pipeline for ${PROJECT_NAME} failed! Check console and Allure report."
+            echo "Pipeline for WDIO-Mocha-Jenkins-Allure failed! Check console and Allure report."
         }
     }
 }
