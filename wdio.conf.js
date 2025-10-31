@@ -52,7 +52,6 @@ export const config = {
     capabilities: [{
         browserName: 'chrome',
         'goog:chromeOptions': {
-            binary: '/usr/bin/google-chrome',
             args: [
                 '--headless',
                 '--no-sandbox',
