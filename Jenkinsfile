@@ -4,7 +4,7 @@ pipeline {
     environment {
         ALLURE_RESULTS_DIR = "allure-results"
         ALLURE_REPORT_DIR = "allure-report"
-        NODE_VERSION = "20.18.0"
+        NODE_VERSION = "20.18.1"
         PATH = "${env.WORKSPACE}/node-v${NODE_VERSION}-linux-x64/bin:${env.PATH}"
     }
 
