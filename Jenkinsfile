@@ -1,8 +1,8 @@
 pipeline {
-    agent any
+    agent none
 
     tools {
-        nodejs 'nodejs'   // ✅ must match the name in Global Tool Configuration
+        nodejs NodeJS
     }
 
     environment {
@@ -41,13 +41,16 @@ pipeline {
     }
 
     post {
+
         always {
+            node('any') {
+                cleanWs()
+                allure([
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'allure-report']]
+                ])
+            }
             echo 'Cleaning workspace and publishing allure report...'
-            cleanWs()
-            allure([
-                reportBuildPolicy: 'ALWAYS',
-                results: [[path: 'allure-report']]
-            ])
             archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
         }
 
