@@ -42,15 +42,13 @@ pipeline {
 
     post {
         always {
-            node {
-                echo 'Cleaning workspace and publishing allure report...'
-                cleanWs()
-                allure([
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'allure-report']]
-                ])
-                archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
-            }
+            echo 'Cleaning workspace and publishing allure report...'
+            cleanWs()
+            allure([
+                reportBuildPolicy: 'ALWAYS',
+                results: [[path: 'allure-report']]
+            ])
+            archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
         }
 
         success {
