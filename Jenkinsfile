@@ -55,8 +55,8 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Archiving test results and reports...'
+        success {
+            echo 'Pipeline completed successfully! Archiving test results and reports...'
             // Archive allure results if they exist
             script {
                 if (fileExists('allure-results')) {
@@ -88,15 +88,27 @@ pipeline {
                 }
             }
             
+            echo "Pipeline for WDIO-Mocha-Jenkins-Allure completed successfully!"
             cleanWs()
         }
 
-        success {
-            echo "Pipeline for WDIO-Mocha-Jenkins-Allure completed successfully!"
-        }
-
         failure {
-            echo "Pipeline for WDIO-Mocha-Jenkins-Allure failed! Check console and Allure report."
+            echo 'Pipeline failed! Still archiving available test results...'
+            // Archive whatever results we have, even on failure
+            script {
+                if (fileExists('allure-results')) {
+                    archiveArtifacts artifacts: 'allure-results/**', fingerprint: true, allowEmptyArchive: true
+                    echo 'Allure results archived (despite pipeline failure)'
+                }
+                
+                if (fileExists('allure-report')) {
+                    archiveArtifacts artifacts: 'allure-report/**', fingerprint: true, allowEmptyArchive: true
+                    echo 'Allure report archived (despite pipeline failure)'
+                }
+            }
+            
+            echo "Pipeline for WDIO-Mocha-Jenkins-Allure failed! Check console and archived artifacts."
+            cleanWs()
         }
     }
 }
