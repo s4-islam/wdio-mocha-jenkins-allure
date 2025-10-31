@@ -20,12 +20,12 @@ pipeline {
             steps {
                 echo "Installing Node.js ${NODE_VERSION} and project dependencies"
                 sh '''
-                    # Download and install Node.js 20.x
+                    # Download and install Node.js 20.x (using .tar.gz instead of .tar.xz)
                     echo "Downloading Node.js ${NODE_VERSION}..."
-                    curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz -o node.tar.xz
+                    curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz -o node.tar.gz
                     
                     echo "Extracting Node.js..."
-                    tar -xf node.tar.xz
+                    tar -xzf node.tar.gz
                     
                     echo "Verifying Node.js installation..."
                     ./node-v${NODE_VERSION}-linux-x64/bin/node --version
