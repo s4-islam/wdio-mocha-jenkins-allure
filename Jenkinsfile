@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_NAME: "WDIO-Mocha-Jenkins-Allure",
+        PROJECT_NAME: "WDIO-Mocha-Jenkins-Allure"
         TEST_COMMAND = "npm test"
         INSTALL_COMMAND = "npm install"
         ALLURE_RESULTS_DIR = "allure-results"
