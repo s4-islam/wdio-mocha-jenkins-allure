@@ -1,13 +1,11 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS'
-    }
-
     environment {
         ALLURE_RESULTS_DIR = "allure-results"
         ALLURE_REPORT_DIR = "allure-report"
+        NODE_VERSION = "20.18.0"
+        PATH = "${env.WORKSPACE}/node-v${NODE_VERSION}-linux-x64/bin:${env.PATH}"
     }
 
     stages {
@@ -18,31 +16,33 @@ pipeline {
             }
         }
 
-        stage('Fix Dependencies') {
+        stage('Install Node.js and Dependencies') {
             steps {
-                echo 'Installing system dependencies for Node.js'
+                echo "Installing Node.js ${NODE_VERSION} and project dependencies"
                 sh '''
-                    # Check if we can install system packages (if running as root or with sudo)
-                    if command -v apt-get >/dev/null 2>&1; then
-                        apt-get update && apt-get install -y libatomic1 || echo "Cannot install system packages, trying alternative approach"
-                    elif command -v yum >/dev/null 2>&1; then
-                        yum install -y libatomic || echo "Cannot install system packages, trying alternative approach" 
-                    fi
+                    # Download and install Node.js 20.x
+                    echo "Downloading Node.js ${NODE_VERSION}..."
+                    curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz -o node.tar.xz
+                    
+                    echo "Extracting Node.js..."
+                    tar -xf node.tar.xz
+                    
+                    echo "Verifying Node.js installation..."
+                    ./node-v${NODE_VERSION}-linux-x64/bin/node --version
+                    ./node-v${NODE_VERSION}-linux-x64/bin/npm --version
+                    
+                    echo "Installing project dependencies..."
+                    ./node-v${NODE_VERSION}-linux-x64/bin/npm install
+                    
+                    echo "Node.js and dependencies installed successfully!"
                 '''
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                echo 'Installing necessary dependencies for project'
-                sh 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo 'Running tests from WDIO+Mocha project'
-                sh 'npm test'
+                sh 'node --version && npm --version && npm test'
             }
         }
 
