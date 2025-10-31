@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs NodeJS
+    }
+
     environment {
         PROJECT_NAME = "WDIO-Mocha-Jenkins-Allure"
         TEST_COMMAND = "npm test"
